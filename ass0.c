@@ -85,16 +85,18 @@ void DeleteFrame(Animation* rg)
 	if (current == NULL) {
 		printf("List is empty.");
 	}
-	else if (rg->frames->pNext == NULL) {
-		free(rg->frames);
+	else if (current->pNext == NULL) {
+		free(current->frameName);
+		free(current);
+		rg->frames = NULL;
 	}
-
-	if (current != NULL) {
+	else if (current != NULL) {
 		while (next->pNext != NULL) {
 			current = next;
 			next = next->pNext;
 		}
 		current->pNext = NULL;
+		free(next->frameName);
 		free(next);
 	}
 }
