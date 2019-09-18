@@ -32,7 +32,7 @@ int main(void)
 	while (RUNNING)
 	{
 		printf("MENU\n 1. Insert a Frame at the front\n 2. Delete last Frame\n 3. Edit a Frame\n 4. Report the Animation\n 5. Quit\n");
-		scanf("%c", &response);
+		scanf(" %c", &response);
 
 		switch (response)
 		{
@@ -49,87 +49,110 @@ int main(void)
 
 void InitAnimation(Animation* rg)
 {
-	struct Frame* head = NULL;
-	head = (struct Frame*)malloc(sizeof(struct Frame));
+	rg->animationName = (char*)malloc(64 * sizeof(char));
+	printf("Enter the name of the Animation:");
+	scanf(" %s", rg->animationName);
 
-	head->frameName = "Initializing Frames.";
-	head->pNext = NULL;
-
-	rg->animationName = "This Animation of Mine.";
-	rg->frames = head;
+	rg->frames = NULL;
 }
 
 void InsertFrame(Animation* rg)
-{	
-	char* frameName = (char *)malloc(50);
-	printf("Enter name of the frame you would like to add: \n");
-	scanf("%s", frameName);
-	struct Frame* newFrame = NULL;
-	newFrame = malloc(sizeof(struct Frame));
+{
+	struct Frame* newFrame = (struct Frame*)malloc(sizeof(struct Frame));
+	newFrame->frameName = (char*)malloc(64 * sizeof(char));
+	printf("Insert a Frame in the Animation\n");
+	printf("Please enter the Frame frameName: \n");
+	scanf(" %s", newFrame->frameName);
 
-	newFrame->pNext = rg->frames;
-	newFrame->frameName = frameName;
-	rg->frames = newFrame;
+	if (rg->frames == NULL) {
+		newFrame->pNext = NULL;
+		rg->frames = newFrame;
+	}
+	else {
+		newFrame->pNext = rg->frames;
+		rg->frames = newFrame;
+	}
 }
 
 void DeleteFrame(Animation* rg)
 {
 	printf("Deleting the last frame in the Animation.\n");
-	
-	struct Frame * current = NULL;
-	struct Frame * next = NULL;
-	
-	current = rg->frames;
-	next = rg->frames->pNext;
 
-	if (rg->frames->pNext == NULL) {
+	struct Frame* current = rg->frames;
+	struct Frame* next = rg->frames->pNext;
+
+
+	if (current == NULL) {
+		printf("List is empty.");
+	}
+	else if (rg->frames->pNext == NULL) {
 		free(rg->frames);
 	}
 
-	while (next->pNext != NULL) {
-		current = next;
-		next = next->pNext;
+	if (current != NULL) {
+		while (next->pNext != NULL) {
+			current = next;
+			next = next->pNext;
+		}
+		current->pNext = NULL;
+		free(next);
 	}
-
-	free(next);
-	current->pNext = NULL;
 }
 
 void EditFrame(Animation* rg)
 {
-	struct Frame* current = rg->frames->frameName;
-	char* frameName = (char *)malloc(50);
-	printf("Enter the name of the Frame that you want to Edit.\n");
-	scanf("%s", frameName);
+	struct Frame* current = rg->frames;
+	printf("Edit a Frame in the Animation\n");
 
-	while (current->frameName != frameName) {
-		current = current->pNext;
-		if (current->pNext == NULL) {
-			printf("Frame with the name: %s not found.", frameName);
-			break;
+	int counter = 0;
+	int index = 0;
+
+	if (current != NULL) {
+		counter++;
+		while (current->pNext != NULL) {
+			current = current->pNext;
+			counter++;
 		}
 	}
 
-	char* newName = (char*)malloc(50);
-	printf("Please enter the new name you would like this frame to have: \n");
-	scanf("%s", newName);
+	printf("There are %d Frame(s) in the list. Please specify the index (<= %d) to edit at : ", counter, (counter - 1));
+	scanf(" %d", &index);
 
-	current->frameName = newName;
-
-	printf("Frame name is now: %s\n", current->frameName);
+	if (index < counter) {
+		struct Frame* head = rg->frames;
+		for (int i = 0; i < index; i++) {
+			head = head->pNext;
+		}
+		char* newName = (char*)malloc(64);
+		printf("The name of this Frame is %s. What do you wish to replace it with?\n", head->frameName);
+		scanf(" %s", newName);
+		head->frameName = newName;
+	}
 }
 
 void ReportAnimation(Animation* rg)
 {
+	int counter = 0;
 	struct Frame* head = rg->frames;
-
+	printf("Animation name is: %s\n", rg->animationName);
 	while (head != NULL) {
-		printf("Frame Name: %s\n", head->frameName);
+		printf("Image #%d, file name = %s\n", counter, head->frameName);
 		head = head->pNext;
+		counter++;
 	}
 }
 
 void CleanUp(Animation* rg)
 {
+	struct Frame* head = rg->frames;
+	struct Frame* temp;
 
+	while (head != NULL) {
+		printf("Cleaning.");
+		temp = head;
+		head = head->pNext;
+		free(temp->frameName);
+		free(temp);
+	}
+	free(rg->animationName);
 }
