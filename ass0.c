@@ -1,4 +1,36 @@
-// ass0.c
+/************************************************
+
+Filename:ass0.c
+
+Version: 1.0
+
+Author: Andrew Palmer
+
+Assignment Number:0
+
+Assignment Name:Animation Project in C
+
+Course Name: C++
+
+Course Code:CST219 and CST8233
+
+Lab Section Number: 303 for both courses
+
+Professor's Name: Surbhi Bahri
+
+Due Date: 2019/01/26
+
+Submission Date:2019/01/26
+
+List of source files: ass0.c
+
+Purpose: Until the User quits the program. It will read a valid response from the keyboard
+
+in order to go through the process of either creating a frame of animation,editing a frame,
+
+displaying all frames or even delete a frame.
+
+**********************************/
 #define _CRT_SECURE_NO_WARNINGS
 #define _CRTDBG_MAP_ALLOC // need this to get the line identification
 //_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF|_CRTDBG_LEAK_CHECK_DF); // in main, after local declarations
@@ -6,15 +38,19 @@
 #include <crtdbg.h>
 #include <stdio.h>
 #include <string.h>
+
 typedef enum { FALSE = 0, TRUE } BOOL;
+
 struct Frame {
 	char* frameName;
 	struct Frame* pNext;
 };
+
 typedef struct {
 	char* animationName;
 	struct Frame* frames;
 }Animation;
+
 // Forward declarations
 void InitAnimation(Animation*);
 void InsertFrame(Animation*);
@@ -22,6 +58,24 @@ void DeleteFrame(Animation*);
 void EditFrame(Animation*);
 void ReportAnimation(Animation*);
 void CleanUp(Animation*);
+
+/***********************************************
+
+Function name: main
+
+Purpose: main function
+
+
+
+In parameters: None
+
+Out Parameters: 0 for Success
+
+Version: 1.0
+
+Author: Andrew Palmer
+
+************************************************/
 int main(void)
 {
 	char response;
@@ -47,6 +101,23 @@ int main(void)
 	return 0;
 }
 
+/***********************************************
+
+Function name: InitAnimation
+
+Purpose: Initializes the Animation 
+
+
+
+In parameters: Animation pointer
+
+Out Parameters: none
+
+Version: 1.0
+
+Author: Andrew Palmer
+
+************************************************/
 void InitAnimation(Animation* rg)
 {
 	rg->animationName = (char*)malloc(64 * sizeof(char));
@@ -56,6 +127,24 @@ void InitAnimation(Animation* rg)
 	rg->frames = NULL;
 }
 
+/***********************************************
+
+Function name: InsertFrame
+
+Purpose: Initializes and adds a "Frame" block 
+	at the beginning of the Animation's frames.
+
+
+
+In parameters: Animation pointer 
+
+Out Parameters: None
+
+Version: 1.0
+
+Author: Andrew Palmer
+
+************************************************/
 void InsertFrame(Animation* rg)
 {
 	struct Frame* newFrame = (struct Frame*)malloc(sizeof(struct Frame));
@@ -74,6 +163,24 @@ void InsertFrame(Animation* rg)
 	}
 }
 
+/***********************************************
+
+Function name: DeleteFrame
+
+Purpose: Deletes a frame from the end of the 
+	Animation's frames list.
+
+
+
+In parameters: Animation pointer
+
+Out Parameters: None
+
+Version: 1.0
+
+Author: Andrew Palmer
+
+************************************************/
 void DeleteFrame(Animation* rg)
 {
 	printf("Deleting the last frame in the Animation.\n");
@@ -101,6 +208,23 @@ void DeleteFrame(Animation* rg)
 	}
 }
 
+/***********************************************
+
+Function name: EditFrame
+
+Purpose: Edits the name of a frame.
+
+
+
+In parameters: Animation pointer
+
+Out Parameters: None
+
+Version: 1.0
+
+Author: Andrew Palmer
+
+************************************************/
 void EditFrame(Animation* rg)
 {
 	struct Frame* current = rg->frames;
@@ -132,6 +256,23 @@ void EditFrame(Animation* rg)
 	}
 }
 
+/***********************************************
+
+Function name: ReportAnimation
+
+Purpose: Prints out the frame list of the 
+	provided Animation.
+
+
+In parameters: Animation pointer
+
+Out Parameters: None
+
+Version: 1.0
+
+Author: Andrew Palmer
+
+************************************************/
 void ReportAnimation(Animation* rg)
 {
 	int counter = 0;
@@ -144,6 +285,23 @@ void ReportAnimation(Animation* rg)
 	}
 }
 
+/***********************************************
+
+Function name: CleanUp
+
+Purpose: Iterates through the list of frames and 
+	frees the memory.
+
+
+In parameters: Animation pointer
+
+Out Parameters: None
+
+Version: 1.0
+
+Author: Andrew Palmer
+
+************************************************/
 void CleanUp(Animation* rg)
 {
 	struct Frame* head = rg->frames;
