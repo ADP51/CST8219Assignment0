@@ -12,9 +12,9 @@ Assignment Name:Animation Project in C
 
 Course Name: C++
 
-Course Code:CST219 and CST8233
+Course Code:CST219
 
-Lab Section Number: 303 for both courses
+Lab Section Number: 302
 
 Professor's Name: Surbhi Bahri
 
