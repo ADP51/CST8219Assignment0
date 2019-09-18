@@ -1,36 +1,20 @@
 
 /************************************************
-
 Filename:ass0.c
-
 Version: 1.0
-
 Author: Andrew Palmer
-
 Assignment Number:0
-
 Assignment Name:Animation Project in C
-
 Course Name: C++
-
 Course Code:CST219
-
 Lab Section Number: 302
-
 Professor's Name: Surbhi Bahri
-
 Due Date: 2019/01/26
-
 Submission Date:2019/01/26
-
 List of source files: ass0.c
-
 Purpose: Until the User quits the program. It will read a valid response from the keyboard
-
 in order to go through the process of either creating a frame of animation,editing a frame,
-
 displaying all frames or even delete a frame.
-
 **********************************/
 #define _CRT_SECURE_NO_WARNINGS
 #define _CRTDBG_MAP_ALLOC // need this to get the line identification
@@ -61,21 +45,12 @@ void ReportAnimation(Animation*);
 void CleanUp(Animation*);
 
 /***********************************************
-
 Function name: main
-
 Purpose: main function
-
-
-
 In parameters: None
-
 Out Parameters: 0 for Success
-
 Version: 1.0
-
 Author: Andrew Palmer
-
 ************************************************/
 int main(void)
 {
@@ -87,7 +62,7 @@ int main(void)
 	while (RUNNING)
 	{
 		printf("MENU\n 1. Insert a Frame at the front\n 2. Delete last Frame\n 3. Edit a Frame\n 4. Report the Animation\n 5. Quit\n");
-		scanf(" %c", &response);
+		scanf("%c", &response);
 
 		switch (response)
 		{
@@ -103,57 +78,44 @@ int main(void)
 }
 
 /***********************************************
-
 Function name: InitAnimation
-
 Purpose: Initializes the Animation 
-
-
-
 In parameters: Animation pointer
-
 Out Parameters: none
-
 Version: 1.0
-
 Author: Andrew Palmer
-
 ************************************************/
 void InitAnimation(Animation* rg)
 {
 	rg->animationName = (char*)malloc(64 * sizeof(char));
 	printf("Enter the name of the Animation:");
 	scanf(" %s", rg->animationName);
-
+	getchar();
 	rg->frames = NULL;
 }
 
 /***********************************************
-
 Function name: InsertFrame
-
 Purpose: Initializes and adds a "Frame" block 
 	at the beginning of the Animation's frames.
-
-
-
 In parameters: Animation pointer 
-
 Out Parameters: None
-
 Version: 1.0
-
 Author: Andrew Palmer
-
 ************************************************/
 void InsertFrame(Animation* rg)
 {
 	struct Frame* newFrame = (struct Frame*)malloc(sizeof(struct Frame));
-	newFrame->frameName = (char*)malloc(64 * sizeof(char));
+	char* name = (char*)malloc(64 * sizeof(char));
 	printf("Insert a Frame in the Animation\n");
 	printf("Please enter the Frame frameName: \n");
-	scanf(" %s", newFrame->frameName);
-
+	scanf(" %s", name);
+	getchar();
+	newFrame->frameName = (char*)malloc(strlen(name) * sizeof(char) + 1);
+	strcpy(newFrame->frameName, name);
+	free(name);
+	printf("%d\n", sizeof(newFrame->frameName));
+	
 	if (rg->frames == NULL) {
 		newFrame->pNext = NULL;
 		rg->frames = newFrame;
@@ -165,22 +127,13 @@ void InsertFrame(Animation* rg)
 }
 
 /***********************************************
-
 Function name: DeleteFrame
-
 Purpose: Deletes a frame from the end of the 
 	Animation's frames list.
-
-
-
 In parameters: Animation pointer
-
 Out Parameters: None
-
 Version: 1.0
-
 Author: Andrew Palmer
-
 ************************************************/
 void DeleteFrame(Animation* rg)
 {
@@ -207,24 +160,16 @@ void DeleteFrame(Animation* rg)
 		free(next->frameName);
 		free(next);
 	}
+	getchar();
 }
 
 /***********************************************
-
 Function name: EditFrame
-
 Purpose: Edits the name of a frame.
-
-
-
 In parameters: Animation pointer
-
 Out Parameters: None
-
 Version: 1.0
-
 Author: Andrew Palmer
-
 ************************************************/
 void EditFrame(Animation* rg)
 {
@@ -244,33 +189,31 @@ void EditFrame(Animation* rg)
 
 	printf("There are %d Frame(s) in the list. Please specify the index (<= %d) to edit at : ", counter, (counter - 1));
 	scanf(" %d", &index);
-
+	getchar();
 	if (index < counter) {
 		struct Frame* head = rg->frames;
 		for (int i = 0; i < index; i++) {
 			head = head->pNext;
 		}
 		printf("The name of this Frame is %s. What do you wish to replace it with?\n", head->frameName);
-		scanf(" %s", head->frameName);
+		char* newName = (char*)malloc(64 * sizeof(char));
+		scanf(" %s", newName);
+		getchar();
+		free(head->frameName);
+		head->frameName = (char*)malloc(strlen(newName) * sizeof(char) + 1);
+		strcpy(head->frameName, newName);
+		free(newName);
 	}
 }
 
 /***********************************************
-
 Function name: ReportAnimation
-
 Purpose: Prints out the frame list of the 
 	provided Animation.
-
-
 In parameters: Animation pointer
-
 Out Parameters: None
-
 Version: 1.0
-
 Author: Andrew Palmer
-
 ************************************************/
 void ReportAnimation(Animation* rg)
 {
@@ -282,24 +225,17 @@ void ReportAnimation(Animation* rg)
 		head = head->pNext;
 		counter++;
 	}
+	getchar();
 }
 
 /***********************************************
-
 Function name: CleanUp
-
 Purpose: Iterates through the list of frames and 
 	frees the memory.
-
-
 In parameters: Animation pointer
-
 Out Parameters: None
-
 Version: 1.0
-
 Author: Andrew Palmer
-
 ************************************************/
 void CleanUp(Animation* rg)
 {
