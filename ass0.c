@@ -1,3 +1,4 @@
+
 /************************************************
 
 Filename:ass0.c
@@ -249,10 +250,8 @@ void EditFrame(Animation* rg)
 		for (int i = 0; i < index; i++) {
 			head = head->pNext;
 		}
-		char* newName = (char*)malloc(64);
 		printf("The name of this Frame is %s. What do you wish to replace it with?\n", head->frameName);
-		scanf(" %s", newName);
-		head->frameName = newName;
+		scanf(" %s", head->frameName);
 	}
 }
 
